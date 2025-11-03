@@ -1,0 +1,4 @@
+﻿passenger,raw_price,raw_cabin,price,cabin,survived
+Passenger1,8500,910,0.85,0.364,1
+Passenger2,1200,2105,0.12,0.842,0
+Passenger3,7800,1121,0.78,0.4484,
