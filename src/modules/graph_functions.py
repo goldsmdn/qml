@@ -1,15 +1,24 @@
 #graph functions
 import matplotlib.pyplot as plt
 
-def plot_simple_scatter(x:list, y:list, labels:list):
-    """plot a simple scatter graph with coloured labels"""
-    markers = ['v', '^', 'o']
+marker_dict = {0: 'v',
+               1: '^',
+               '': '.'}
 
+text_dict = {0: 'Died',
+             1: 'Survived',
+             '': 'Test'}
+
+def plot_simple_scatter(x:list, y:list, labels:list, survived:list):
+    """plot a simple scatter graph with coloured labels"""
     for i in range(len(x)):
+        marker = marker_dict[survived[i]]
+        text = text_dict[survived[i]]
+        label = f'{labels[i]} - {text}'
         plt.scatter(x[i], 
                     y[i], 
-                    label=labels[i],
-                    marker=markers[i],
+                    label=label,
+                    marker=marker,
                     )    
 
     plt.title('Price against cabin for Titanic project')
