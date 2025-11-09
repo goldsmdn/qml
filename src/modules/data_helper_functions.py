@@ -24,6 +24,6 @@ def read_csv(file_path:str)->list[dict]:
         print(f"An unexpected error occurred: {e}")
 
 def find_gamma_m(x:np.array, xm: np.array)-> float:
-
-    gamma_m = 1 - (np.dot(x-xm, x-xm)/C)
+    diff = x - xm
+    gamma_m = 1 - (np.dot(diff, diff)/C)
     return gamma_m
