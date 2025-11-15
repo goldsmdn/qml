@@ -39,6 +39,7 @@ def normalise(x1:np.array, x2:np.array) -> tuple[np.array, np.array]:
     return x1, x2
 
 def find_norm(alpha: list[float]) -> list[float]:
+    """find the norm a a"""
     alpha_norm = np.sqrt(np.dot(alpha, alpha))
     return alpha_norm
 
@@ -73,3 +74,14 @@ def prepare_quantum_feature_vector (x1:list[float], x2:list[float], y: list[floa
             raise Exception(f'y should be 0 or 1, not {y[i]}')
     print(f'alpha={[f'{v:.3f}' for v in alpha]}\r')
     return(alpha)
+
+def normalise_feature_vector(alpha: list[float]) -> list[float]:
+    """Normalise the quantum feature vector alpha expressed as a list"""
+    alpha_norm = []
+    norm = float(find_norm(alpha))
+    print(f'{norm=}')
+    for items in alpha:
+        alpha_norm.append(float(items)/norm)
+    print(alpha)
+    print(f'alpha_norm={[f'{v:.3f}' for v in alpha_norm]}\r')
+    return alpha_norm
