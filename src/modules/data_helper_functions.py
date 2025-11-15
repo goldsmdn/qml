@@ -37,3 +37,39 @@ def normalise(x1:np.array, x2:np.array) -> tuple[np.array, np.array]:
         x1[i] /= l2_norm
         x2[i] /= l2_norm
     return x1, x2
+
+def find_norm(alpha: list[float]) -> list[float]:
+    alpha_norm = np.sqrt(np.dot(alpha, alpha))
+    return alpha_norm
+
+def pre_process_feature_vector(x1: list[float], x2: list[float], y:list) -> tuple[list[float], list[float], list[int]]:
+    """Add an extra copy of the features of Passsenger 3, and tidy up y to be integers"""
+    x1.append(x1[2])
+    x2.append(x2[2])
+    y = [y[v%2] for v in range(4)]
+    print(f'x1={[f'{v:.3f}' for v in x1]}\r')
+    print(f'x2={[f'{v:.3f}' for v in x2]}\r')
+    print(f'{y=}')
+    return x1, x2, y
+
+def prepare_quantum_feature_vector (x1:list[float], x2:list[float], y: list[float]) -> list[float]:
+    """Prepare quantum feature vector by extending each 2D data point based on class label y"""
+    alpha = []
+    if len(x1) != len(x2):
+        raise Exception(f'{len(x1)=} but {len(x2)=}')
+    for i in range(len(x1)):
+        # extend state to forth qubit
+        if y[i] == 0:
+            alpha.append((x1[i]))
+            alpha.append(0)
+            alpha.append(x2[i])
+            alpha.append(0)
+        elif y[i] == 1:
+            alpha.append(0)
+            alpha.append(x1[i])
+            alpha.append(0)
+            alpha.append(x2[i])
+        else:
+            raise Exception(f'y should be 0 or 1, not {y[i]}')
+    print(f'alpha={[f'{v:.3f}' for v in alpha]}\r')
+    return(alpha)

@@ -24,7 +24,9 @@ def plot_simple_scatter(x:list, y:list, labels:list, survived:list):
     plt.title('Price against cabin for Titanic project')
     plt.xlabel('Price paid')
     plt.xlim(left=0)
+    plt.xlim(right=1.0)
     plt.ylim(bottom=0)
+    plt.ylim(top=1.0)
     plt.ylabel('Cabin')
     plt.grid(True)
 
