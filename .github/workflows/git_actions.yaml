@@ -21,7 +21,7 @@ jobs:
         run: |
           uv venv .venv
           source .venv/bin/activate
-          uv pip install numpy pytest matplotlib pennylane math 
+          uv pip install numpy pytest matplotlib pennylane
 
       - name: Test with pytest
         run: |
