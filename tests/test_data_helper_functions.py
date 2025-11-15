@@ -15,6 +15,7 @@ from src.modules.data_helper_functions import (find_gamma_m,
                                                find_norm,
                                                pre_process_feature_vector,  
                                                prepare_quantum_feature_vector,
+                                               normalise_feature_vector,
                                             )                           
 from config.config import ABS
 
@@ -113,4 +114,28 @@ def test_prepare_quantum_feature_vector():
                        0.4983875912792616,
                        0,
                        ]
+    assert actual_result == approx(expected_result, abs=ABS)
+
+def test_normalise_feature_vector():
+    """Test normalise_feature_vector function"""
+    alpha = [0,
+             0.9192568700519707,
+             0,
+             0.39365823611637335,
+             0.14109213343908047,
+             0,
+             0.9899964696308814,
+             0,
+             0,
+             0.8669543291655308,
+             0,
+             0.4983875912792616,
+             0.8669543291655308,
+             0,
+             0.4983875912792616,
+             0,
+            ]
+    actual_result = normalise_feature_vector(alpha)
+    norm = np.sqrt(sum([v**2 for v in alpha]))
+    expected_result = [v/norm for v in alpha]
     assert actual_result == approx(expected_result, abs=ABS)

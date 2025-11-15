@@ -24,9 +24,31 @@ def read_csv(file_path:str)->list[dict]:
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-def find_gamma_m(x:np.array, xm: np.array)-> float:
+def clean_and_print_data(data: list[dict]) -> tuple[list[str], list[float], list[float], list]:
+    """Cleans and prints data loaded into a list of dictionaries from a CSV file."""
+    labels, x1, x2, y = [], [], [], []
+
+    for row in data:
+        labels.append(row['passenger'])
+        x1.append(float(row['price']))
+        x2.append(float(row['cabin']))
+        y_val = (row['survived'])
+        if y_val:
+            y.append(int(y_val))
+        else:
+            y.append(y_val)
+
+    print(f'labels = {labels}')
+    print(f'x1 = {x1}')
+    print(f'x2 = {x2}')
+    print(f'y - classification result {y}')
+
+    return labels, x1, x2, y
+
+
+def find_gamma_m(x:np.array, xm: np.array, c=1)-> float:
     diff = x - xm
-    gamma_m = 1 - (np.dot(diff, diff)/C)
+    gamma_m = 1 - (np.dot(diff, diff)/c)
     return gamma_m
 
 def normalise(x1:np.array, x2:np.array) -> tuple[np.array, np.array]:
@@ -39,6 +61,7 @@ def normalise(x1:np.array, x2:np.array) -> tuple[np.array, np.array]:
     return x1, x2
 
 def find_norm(alpha: list[float]) -> list[float]:
+    """find the norm a a"""
     alpha_norm = np.sqrt(np.dot(alpha, alpha))
     return alpha_norm
 
@@ -47,9 +70,11 @@ def pre_process_feature_vector(x1: list[float], x2: list[float], y:list) -> tupl
     x1.append(x1[2])
     x2.append(x2[2])
     y = [y[v%2] for v in range(4)]
+    print('After pre-processing feature vector:\r')
+    print('Added extra copy of Passenger 3 and tidy up y to be integers\r')
     print(f'x1={[f'{v:.3f}' for v in x1]}\r')
     print(f'x2={[f'{v:.3f}' for v in x2]}\r')
-    print(f'{y=}')
+    print(f'{y=} \r')
     return x1, x2, y
 
 def prepare_quantum_feature_vector (x1:list[float], x2:list[float], y: list[float]) -> list[float]:
@@ -71,5 +96,17 @@ def prepare_quantum_feature_vector (x1:list[float], x2:list[float], y: list[floa
             alpha.append(x2[i])
         else:
             raise Exception(f'y should be 0 or 1, not {y[i]}')
+    print('After preparing quantum feature vector: \r')
     print(f'alpha={[f'{v:.3f}' for v in alpha]}\r')
     return(alpha)
+
+def normalise_feature_vector(alpha: list[float]) -> list[float]:
+    """Normalise the quantum feature vector alpha expressed as a list"""
+    alpha_norm = []
+    norm = float(find_norm(alpha))
+    print(f'Norm before normalisation = {norm}')
+    for items in alpha:
+        alpha_norm.append(float(items)/norm)
+    print('After normalisation: \r')
+    print(f'alpha_norm={[f'{v:.3f}' for v in alpha_norm]}\r')
+    return alpha_norm
