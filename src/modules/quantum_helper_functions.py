@@ -59,7 +59,6 @@ def set_Paulix_controls(bin_list:list[int], wires:list[str]) -> None:
 def my_amplitude_encoding(features: list[float], wires: list[str]) -> None:
     """Custom amplitude encoding function"""
     validate_feature_list(features, wires)
-    import pennylane as qml
     for s in range(len(wires), 0, -1):
         #s counts down from n_qubits to 1
         qubit = len(wires) - s + 1
