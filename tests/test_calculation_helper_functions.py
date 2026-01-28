@@ -9,7 +9,10 @@ import sys
 sys.path.append(HOME_DIR)
 from src.modules.calculation_helper_functions import (phi,
                                                       generate_random_x_vector,
-                                                      generate_weight_matrix)
+                                                      generate_weight_matrix,
+                                                      calculate_energy,
+                                                      overlap,
+                                                      )
 
 def test_phi_positive():
     """Test phi function with positive input"""
@@ -53,3 +56,46 @@ def test_populate_weight_matrix():
                            [ 0.0,         0.0,  0.0],
                            [-0.66666667,  0.0,  0.0]])
     assert np.allclose(W_populated, expected_W)
+
+def test_calculate_energy():
+    """Test calculate_energy function"""
+    W = np.array([[0.0, 1.0],
+                  [1.0, 0.0]])
+    x = np.array([1, -1])
+    energy = calculate_energy(W, x)
+    expected_energy = 1.0
+    assert energy == expected_energy
+
+def test_overlap1():
+    """Test overlap function"""
+    x1 = np.array([1, -1, 1])
+    x2 = np.array([1, 1, -1])
+    actual_overlap = overlap(x1, x2)
+    expected_overlap = -1/3
+    assert actual_overlap == expected_overlap
+
+def test_overlap2():
+    """Test overlap function"""
+    N = 5
+    M = 1
+    np.random.seed(42)
+    #generate random patterns and weight matrix
+    x1 = generate_random_x_vector(N, M) 
+    np.random.seed(42)
+    x2 = generate_random_x_vector(N, M)
+    actual_overlap = overlap(x1, x2)
+    expected_overlap = 1
+    assert actual_overlap == expected_overlap
+
+def test_overlap3():
+    """Test overlap function"""
+    N = 5
+    M = 1
+    np.random.seed(42)
+    #generate random patterns and weight matrix
+    x1 = generate_random_x_vector(N, M) 
+    np.random.seed(42)
+    x2 = -x1
+    actual_overlap = overlap(x1, x2)
+    expected_overlap = -1
+    assert actual_overlap == expected_overlap
