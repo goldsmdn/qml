@@ -1,5 +1,6 @@
 #quantum helper functions
 import pennylane as qml
+import numpy as np
 import math
 
 from src.modules.data_helper_functions import (find_norm)                              
@@ -77,4 +78,40 @@ def my_amplitude_encoding(features: list[float], wires: list[str]) -> None:
                 # controlled RY rotation on active wire
                 qml.ctrl(qml.RY, control=control_wires)(theta, wires=[active_wire])
                 #undo the controls by repeating
-                set_Paulix_controls(bin_list, wires)                   
+                set_Paulix_controls(bin_list, wires)        
+
+def find_norm_of_complex_vector(vec:np.ndarray) -> float:
+    """Find the norm of a complex vector."""
+    norm = 0
+    for element in vec:
+        norm += abs(element)**2
+    return math.sqrt(norm)    
+
+def check_vector_normalized(vec:np.ndarray):
+    if abs(find_norm_of_complex_vector(vec) - 1) > 1e-6:
+        raise ValueError("Generated vector is not normalized.")
+    else:
+        return       
+    
+def generate_random_state() -> np.ndarray:
+    """Generate a random single-qubit state"""
+    gamma = np.random.rand() * 2 * np.pi
+    theta = np.random.rand() * np.pi
+    phi = np.random.rand() * 2 * np.pi
+    alpha = np.cos(theta / 2) * np.exp(1j * phi)
+    beta = np.sin(theta / 2) * np.exp(1j * (phi + gamma))
+    vec = np.array([alpha, beta], dtype=complex)
+    check_vector_normalized(vec)
+    return vec[0], vec[1]
+
+def calculate_overlap_from_states(vec_a:np.ndarray, vec_b:np.ndarray)->float:
+    """Calculate the overlap between two states given their state vectors."""
+    overlap = abs(np.vdot(vec_a, vec_b))
+    return overlap
+
+def calculate_overlap_from_measurement(measurement_avg:float)->float:
+    """Calculate overlap from measurement average."""
+    overlap = 1 - 2 * measurement_avg
+    if overlap < 0:
+        overlap = 0
+    return math.sqrt(overlap)
